@@ -8,7 +8,7 @@ import org.openqa.selenium.support.PageFactory;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SearchResultsPage extends BasePage {
+public class SearchResultsPage extends AbstractPage {
 
     @FindBy(css = ".product-title")
     private List<WebElement> productTitles;
