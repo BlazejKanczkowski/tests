@@ -1,46 +1,45 @@
 package com.example.pages;
 
+import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
+import com.zebrunner.carina.webdriver.gui.AbstractPage;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
-public class CartPage extends AbstractPage {
+public class CartPage extends BasePage {
 
     @FindBy(xpath = "//h2[normalize-space()='Subscription']")
-    private WebElement subscriptionHeader;
+    private ExtendedWebElement  subscriptionHeader;
 
     @FindBy(css = "#susbscribe_email")
-    private WebElement subscriptionInput;
+    private ExtendedWebElement  subscriptionInput;
 
     @FindBy(css = "#subscribe")
-    private WebElement subscriptionButton;
+    private ExtendedWebElement  subscriptionButton;
 
     @FindBy(xpath = "//div[contains(@class, 'alert-success') and contains(text(), 'You have been successfully subscribed!')]")
-    private WebElement successMessage;
+    private ExtendedWebElement  successMessage;
 
     @FindBy(css = ".cart_product")
-    private List<WebElement> cartItems;
+    private List<ExtendedWebElement > cartItems;
 
     @FindBy(css = ".cart_total_price")
-    private List<WebElement> productPrices;
+    private List<ExtendedWebElement > productPrices;
 
     @FindBy(css = ".cart_quantity")
-    private List<WebElement> productQuantities;
+    private List<ExtendedWebElement > productQuantities;
 
     @FindBy(css = ".cart_total_price")
-    private WebElement totalPriceElement;
-
-
+    private ExtendedWebElement  totalPriceElement;
 
 
     public CartPage(WebDriver driver) {
         super(driver);
-        PageFactory.initElements(driver, this);
+        //PageFactory.initElements(driver, this);
     }
 
     public void scrollToSubscriptionSection() {
@@ -48,19 +47,20 @@ public class CartPage extends AbstractPage {
     }
 
     public boolean isSubscriptionSectionVisible() {
-        return isElementDisplayed(subscriptionHeader);
+        return subscriptionHeader.isElementPresent(5);
     }
+
     public boolean isSubscriptionSuccessMessageVisible() {
-        return isElementDisplayed(successMessage);
+        return successMessage.isElementPresent(5);
     }
 
     public void subscribe(String email) {
-        sendKeys(subscriptionInput, email);
-        click(subscriptionButton);
+        subscriptionInput.type(email);
+        subscriptionButton.click();
     }
 
     public boolean isProductInCart(int productIndex) {
-        return cartItems.size() > productIndex && cartItems.get(productIndex).isDisplayed();
+        return cartItems.size() > productIndex && cartItems.get(productIndex).isElementPresent();
     }
 
     public boolean isPriceCorrect(int productIndex, String expectedPrice) {
@@ -81,7 +81,7 @@ public class CartPage extends AbstractPage {
 
     public String getTotalPriceFromCart() {
         int total = 0;
-        for (WebElement priceElement : productPrices) {
+        for (ExtendedWebElement priceElement : productPrices) {
             String priceText = priceElement.getText().replaceAll("[^\\d]", "");
             total += Integer.parseInt(priceText);
         }

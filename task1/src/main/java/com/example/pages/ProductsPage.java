@@ -1,93 +1,85 @@
 package com.example.pages;
 
+import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class ProductsPage extends AbstractPage {
+public class ProductsPage extends BasePage {
 
     @FindBy(css = "input[name='search']")
-    private WebElement searchInput;
+    private ExtendedWebElement searchInput;
 
     @FindBy(css = "button#submit_search")
-    private WebElement searchButton;
+    private ExtendedWebElement searchButton;
 
     @FindBy(css = ".productinfo.text-center p")
-    private List<WebElement> productTitles;
+    private List<ExtendedWebElement> productTitles;
 
     @FindBy(xpath = "//h2[normalize-space()='All Products']")
-    private WebElement allProductsHeader;
+    private ExtendedWebElement allProductsHeader;
 
     @FindBy(css = ".single-products")
-    private List<WebElement> products;
+    private List<ExtendedWebElement> products;
 
     @FindBy(css = ".single-products .productinfo .add-to-cart")
-    private List<WebElement> addToCartButtons;
+    private List<ExtendedWebElement> addToCartButtons;
 
     @FindBy(css = "a[href='/view_cart']")
-    private WebElement cartButton;
+    private ExtendedWebElement cartButton;
 
     @FindBy(css = "button.btn.btn-success.close-modal[data-dismiss='modal']")
-    private WebElement continueShoppingButton;
+    private ExtendedWebElement continueShoppingButton;
 
     @FindBy(css = ".single-products .price h2")
-    private List<WebElement> productPrices;
+    private List<ExtendedWebElement> productPrices;
 
-
+    public ProductsPage(WebDriver driver) {
+        super(driver);
+    }
 
     public List<String> getProductPrices() {
         List<String> prices = new ArrayList<>();
-        for (WebElement price : productPrices) {
-            prices.add(price.getText());  // Dodajemy tekst ceny do listy
+        for (ExtendedWebElement price : productPrices) {
+            prices.add(price.getText());
         }
         return prices;
     }
 
-    public ProductsPage(WebDriver driver) {
-        super(driver);
-        PageFactory.initElements(driver, this);
-    }
-
     public void waitForPageToLoad() {
-        wait.until(ExpectedConditions.visibilityOf(allProductsHeader));
+        allProductsHeader.assertElementPresent(5);
     }
 
     public void searchForProduct(String productName) {
-        sendKeys(searchInput, productName);
-        click(searchButton);
+        searchInput.type(productName);
+        searchButton.click();
     }
-
 
     public boolean hasResults() {
         return !productTitles.isEmpty();
     }
 
     public void hoverAndAddToCart(int productIndex) {
-        WebElement product = products.get(productIndex);
+        ExtendedWebElement product = products.get(productIndex);
         Actions actions = new Actions(driver);
 
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", product);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", product.getElement());
 
-        actions.moveToElement(product).perform();
+        actions.moveToElement(product.getElement()).perform();
 
-        WebElement addToCartButton = addToCartButtons.get(productIndex);
-        click(addToCartButton);
-        waitForElement(addToCartButton);
-
+        ExtendedWebElement addToCartButton = addToCartButtons.get(productIndex);
+        addToCartButton.click();
     }
 
     public void continueShopping() {
-        click(continueShoppingButton);
+        continueShoppingButton.click();
     }
+
     public void goToCartPage() {
-        click(cartButton);
+        cartButton.click();
     }
 }

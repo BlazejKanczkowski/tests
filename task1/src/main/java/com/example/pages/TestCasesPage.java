@@ -1,21 +1,19 @@
 package com.example.pages;
 
+import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
-public class TestCasesPage extends AbstractPage {
+public class TestCasesPage extends BasePage {
 
     @FindBy(css = "h2.title.text-center b")
-    private WebElement testCasesHeader;
+    private ExtendedWebElement testCasesHeader;
 
     public TestCasesPage(WebDriver driver) {
         super(driver);
-        PageFactory.initElements(driver, this);
     }
 
     public boolean isTestCasesPageVisible() {
-        return isElementDisplayed(testCasesHeader);
+        return testCasesHeader.isElementPresent(5);
     }
 }

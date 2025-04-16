@@ -1,28 +1,26 @@
 package tests;
 
 import com.example.pages.HomePage;
-import com.example.pages.TestCasesPage;
-import com.example.utils.DriverFactory;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class SubscriptionTest extends AbstractTest {
+public class SubscriptionTest extends BaseTest {
 
     private HomePage homePage;
 
-    @BeforeMethod
-    public void setUp() {
-        driver = DriverFactory.getDriver();
-        homePage = new HomePage(driver);
 
+    @Override
+    protected void initPages() {
+        homePage = new HomePage(getDriver());
     }
+
     @Test
     public void testSubscriptionOnHomePage() {
-
         homePage.open();
         homePage.acceptCookiesIfPresent();
         homePage.scrollToSubscriptionSection();
+
         Assert.assertTrue(homePage.isSubscriptionSectionVisible(), "Subscription section is not visible!");
 
         String randomEmail = "test" + System.currentTimeMillis() + "@example.com";

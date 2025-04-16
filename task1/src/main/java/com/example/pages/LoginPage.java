@@ -1,48 +1,44 @@
 package com.example.pages;
 
+import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
-public class LoginPage extends AbstractPage {
+public class LoginPage extends BasePage {
 
     @FindBy(xpath = "//h2[normalize-space()='Login to your account']")
-    private WebElement loginHeader;
+    private ExtendedWebElement loginHeader;
 
     @FindBy(css = "input[data-qa='login-email']")
-    private WebElement emailInput;
+    private ExtendedWebElement emailInput;
 
     @FindBy(css = "input[data-qa='login-password']")
-    private WebElement passwordInput;
+    private ExtendedWebElement passwordInput;
 
     @FindBy(css = "button[data-qa='login-button']")
-    private WebElement loginButton;
+    private ExtendedWebElement loginButton;
 
     @FindBy(xpath = "//*[contains(text(), 'Your email or password is incorrect!')]")
-    private WebElement errorMessage;
+    private ExtendedWebElement errorMessage;
 
     public LoginPage(WebDriver driver) {
         super(driver);
-        PageFactory.initElements(driver, this);
-        wait.until(ExpectedConditions.visibilityOf(loginHeader));
     }
 
     public boolean isLoginHeaderVisible() {
-        return isElementDisplayed(loginHeader);
+        return loginHeader.isElementPresent(5);
     }
 
     public void enterLoginCredentials(String email, String password) {
-        sendKeys(emailInput, email);
-        sendKeys(passwordInput, password);
+        emailInput.type(email);
+        passwordInput.type(password);
     }
 
     public void clickLoginButton() {
-        click(loginButton);
+        loginButton.click();
     }
 
     public boolean isLoginErrorVisible() {
-        return isElementDisplayed(errorMessage);
+        return errorMessage.isElementPresent(5);
     }
 }
