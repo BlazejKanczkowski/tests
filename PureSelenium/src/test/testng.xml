@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="My Awesome Automation Suite" parallel="classes" thread-count="6">
+    <test name="All Tests">
+        <classes>
+            <class name="tests.SearchTest"/>
+            <class name="tests.SubscriptionTest"/>
+            <class name="tests.CartSubscriptionTest"/>
+            <class name="tests.AddProductsInCartTest"/>
+            <class name="tests.VerifyTestCasesPageTest"/>
+            <class name="tests.LoginUserWithIncorrectEmailAndPasswordTest"/>
+        </classes>
+    </test>
+</suite>
